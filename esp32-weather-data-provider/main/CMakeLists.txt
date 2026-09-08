@@ -6,12 +6,14 @@ idf_component_register(
     	"Src"
     	"Src/hardware"
     	"Src/service"
+    	"Src/service/http"
     	"Src/task"
     	"Src/util"
     INCLUDE_DIRS
     	"Inc"
     	"Inc/hardware"
     	"Inc/service"
+    	"Inc/service/http"
     	"Inc/task"
     	"Inc/util"
     PRIV_INCLUDE_DIRS   # optional, add here private include directories
