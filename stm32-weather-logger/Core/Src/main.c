@@ -22,7 +22,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "common.h"
 #include "task/sensor_task.h"
+#include "task/display_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,6 +54,18 @@ const osThreadAttr_t SENSOR_TASK_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for DISPLAY_TASK */
+osThreadId_t DISPLAY_TASKHandle;
+const osThreadAttr_t DISPLAY_TASK_attributes = {
+  .name = "DISPLAY_TASK",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityHigh,
+};
+/* Definitions for display_queue */
+osMessageQueueId_t display_queueHandle;
+const osMessageQueueAttr_t display_queue_attributes = {
+  .name = "display_queue"
+};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -62,6 +76,7 @@ static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 void SENSOR_TASK_Start(void *argument);
+void DISPLAY_TASK_Start(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -122,6 +137,10 @@ int main(void)
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of display_queue */
+  display_queueHandle = osMessageQueueNew (16, sizeof(DISPLAY_MSG_t), &display_queue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -129,6 +148,9 @@ int main(void)
   /* Create the thread(s) */
   /* creation of SENSOR_TASK */
   SENSOR_TASKHandle = osThreadNew(SENSOR_TASK_Start, NULL, &SENSOR_TASK_attributes);
+
+  /* creation of DISPLAY_TASK */
+  DISPLAY_TASKHandle = osThreadNew(DISPLAY_TASK_Start, NULL, &DISPLAY_TASK_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -330,6 +352,21 @@ void SENSOR_TASK_Start(void *argument)
   /* Infinite loop */
   UAL_SENSOR_TASK_Start(argument);
   /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_DISPLAY_TASK_Start */
+/**
+* @brief Function implementing the DISPLAY_TASK thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_DISPLAY_TASK_Start */
+void DISPLAY_TASK_Start(void *argument)
+{
+  /* USER CODE BEGIN DISPLAY_TASK_Start */
+  /* Infinite loop */
+  UAL_DISPLAY_TASK_Start(argument);
+  /* USER CODE END DISPLAY_TASK_Start */
 }
 
 /**

@@ -27,6 +27,11 @@ typedef struct {
 	TIME_t time;
 } SENSORS_DATA_t;
 
+typedef struct {
+	SENSORS_DATA_t sensors_data;
+} DISPLAY_MSG_t;
+
+void UAL_QueueTimeoutError_Handler(void);
 void UAL_Error_Handler(void);
 
 #endif /* __COMMON_H */
