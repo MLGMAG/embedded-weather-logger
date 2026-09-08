@@ -38,6 +38,10 @@ The two firmware projects are built and flashed independently — there is no sh
 3. The ESP32 sends `status` to the STM32 over UART on a timer (default every 60s, configurable) and gets back a JSON sensor snapshot, which it caches.
 4. Any client on the Wi-Fi network can `GET /api/v1/sensors` on the ESP32 to retrieve the latest cached snapshot as JSON.
 
+## Architecture
+
+![Architecture](schematic/architecture.png)
+
 ### STM32 UART command console
 
 Send `\n`-terminated ASCII commands over USART1:
