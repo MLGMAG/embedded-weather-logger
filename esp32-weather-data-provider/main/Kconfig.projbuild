@@ -2,6 +2,13 @@ menu "App Configuration"
 
     orsource "$IDF_PATH/examples/common_components/env_caps/$IDF_TARGET/Kconfig.env_caps"
 
+	menu "TASK Configuration"
+		config UART_TX_TASK_PRIORITY
+		    int "UART TX Task priority"
+			range 0 20
+		    default 1
+	endmenu
+	
 	menu "UART Configuration"
 		config UART_BAUD_RATE
 			int "UART communication speed"

@@ -35,4 +35,10 @@ typedef struct {
 	TIME_t time;
 } SENSORS_DATA_t;
 
+typedef struct {
+	char msg[UART_TX_MSG_LEN_MAX];
+} UART_TX_QUEUE_MSG_t;
+
+void UAL_Error_Handler(void);
+
 #endif /* __COMMON_H */
