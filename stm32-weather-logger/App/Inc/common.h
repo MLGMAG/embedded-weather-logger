@@ -3,6 +3,10 @@
 
 #include "stdint.h"
 
+typedef enum {
+	UAL_STATUS_OK, UAL_STATUS_ERROR,
+} UAL_STATUS_t;
+
 typedef struct {
 	uint16_t year;
 	uint8_t month;
