@@ -21,6 +21,8 @@ A two-board embedded weather station: an STM32 microcontroller reads sensors, dr
 
 The two firmware projects are built and flashed independently — there is no shared build system, and no shared code between them (the wire-format struct is duplicated in each project's `common.h`).
 
+![Prototype](schematic/prototype.jpg)
+
 ## Hardware
 
 - **MCU**: STM32F411CEU6 (Cortex-M4, "Black Pill"-style board)
