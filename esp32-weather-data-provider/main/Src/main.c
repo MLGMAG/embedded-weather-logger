@@ -1,11 +1,13 @@
 #include "esp_log.h"
 #include "hardware/uart_util.h"
 #include "task/uart_tx_task.h"
+#include "task/uart_rx_task.h"
 #include <stdbool.h>
 #include <unistd.h>
 
 
 TaskHandle_t UART_TX_TASK_HANDLER = NULL;
+TaskHandle_t UART_RX_TASK_HANDLER = NULL;
 
 QueueHandle_t UART_TX_QUEUE_HANDLER = NULL;
 SemaphoreHandle_t SENSORS_DATA_STORAGE_MUTEX = NULL;
@@ -22,6 +24,15 @@ static void init_tasks(void) {
 	configASSERT(UART_TX_TASK_HANDLER);
 	if (status != pdPASS) {
 		ESP_LOGE(TAG, "Could not create UART_TX_TASK task, status: %d", status);
+		UAL_Error_Handler();
+	}
+	
+	status = xTaskCreate(UAL_UART_RX_TASK_Start, "UART_RX_TASK",
+						 configMINIMAL_STACK_SIZE, NULL,
+						 CONFIG_UART_RX_TASK_PRIORITY, &UART_RX_TASK_HANDLER);
+	configASSERT(UART_RX_TASK_HANDLER);
+	if (status != pdPASS) {
+		ESP_LOGE(TAG, "Could not create UART_RX_TASK task, status: %d", status);
 		UAL_Error_Handler();
 	}
 }

@@ -7,6 +7,11 @@ menu "App Configuration"
 		    int "UART TX Task priority"
 			range 0 20
 		    default 1
+
+		config UART_RX_TASK_PRIORITY
+		    int "UART RX Task priority"
+			range 0 20
+		    default 5
 	endmenu
 	
 	menu "UART Configuration"
