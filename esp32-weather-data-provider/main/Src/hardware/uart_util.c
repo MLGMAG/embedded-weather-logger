@@ -5,22 +5,21 @@
 
 static const char *TAG = "UART_UTIL";
 
-QueueHandle_t UAL_UART1_UTIL_QUEUE;
-QueueHandle_t UAL_UART2_UTIL_QUEUE;
+QueueHandle_t UAL_UART_UTIL_QUEUE;
 
-static void init_uart1() {
+void UAL_UART_UTIL_Init() {
 	esp_err_t status;
-
+	
 	status = uart_driver_install(
 		UART_NUM_1,
 		CONFIG_UART_RX_BUFFER_SIZE, 
 		CONFIG_UART_TX_BUFFER_SIZE, 
 		10, 
-		&UAL_UART1_UTIL_QUEUE, 
+		&UAL_UART_UTIL_QUEUE, 
 		0
 	);
 	ESP_ERROR_CHECK(status);
-
+	
 	uart_config_t uart_config = {
 	    .baud_rate = CONFIG_UART_BAUD_RATE,
 	    .data_bits = UART_DATA_8_BITS,
@@ -30,58 +29,17 @@ static void init_uart1() {
 	};
 	status = uart_param_config(UART_NUM_1, &uart_config);
 	ESP_ERROR_CHECK(status);
-
+	
 	status = uart_set_pin(
 		UART_NUM_1,
-		CONFIG_UART1_TX_PORT,
-		CONFIG_UART1_RX_PORT, 
+		CONFIG_UART_TX_PORT,
+		CONFIG_UART_RX_PORT, 
 		UART_PIN_NO_CHANGE, 
 		UART_PIN_NO_CHANGE, 
 		UART_PIN_NO_CHANGE, 
 		UART_PIN_NO_CHANGE
 	);
 	ESP_ERROR_CHECK(status);
-}
-
-
-static void init_uart2() {
-	esp_err_t status;
-
-	status = uart_driver_install(
-		UART_NUM_2,
-		CONFIG_UART_RX_BUFFER_SIZE, 
-		CONFIG_UART_TX_BUFFER_SIZE, 
-		10, 
-		&UAL_UART2_UTIL_QUEUE, 
-		0
-	);
-	ESP_ERROR_CHECK(status);
-
-	uart_config_t uart_config = {
-	    .baud_rate = CONFIG_UART_BAUD_RATE,
-	    .data_bits = UART_DATA_8_BITS,
-	    .parity = UART_PARITY_DISABLE,
-	    .stop_bits = UART_STOP_BITS_1,
-	    .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-	};
-	status = uart_param_config(UART_NUM_2, &uart_config);
-	ESP_ERROR_CHECK(status);
-
-	status = uart_set_pin(
-		UART_NUM_2,
-		CONFIG_UART2_TX_PORT,
-		CONFIG_UART2_RX_PORT,
-		UART_PIN_NO_CHANGE, 
-		UART_PIN_NO_CHANGE, 
-		UART_PIN_NO_CHANGE, 
-		UART_PIN_NO_CHANGE
-	);
-	ESP_ERROR_CHECK(status);
-}
-
-void UAL_UART_UTIL_Init() {
-	init_uart1();
-	init_uart2();
 }
 
 UAL_STATUS_t UAL_UART_UTIL_Transmit(uart_port_t port, const uint8_t *data, uint16_t len) {

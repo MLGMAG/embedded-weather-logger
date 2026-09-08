@@ -9,12 +9,12 @@
 #include "service/sensors_data_storage.h"
 
 #define RETRIEVE_DATA_COMMAND "status"
-#define UART_PORT UART_NUM_2
+#define UART_PORT UART_NUM_1
 #define BUFFER_LEN 128
 
 static const char *TAG = "SENSORS_DATA_SYNC_TASK";
 
-extern QueueHandle_t UAL_UART2_UTIL_QUEUE;
+extern QueueHandle_t UAL_UART_UTIL_QUEUE;
 
 static uint8_t raw_data_buffer[BUFFER_LEN] = {0};
 
@@ -39,10 +39,10 @@ static UAL_STATUS_t receive_data(uint8_t* buffer, uint16_t buffer_len) {
 	uint8_t data_pointer = 0;
 	buffer[0] = '\0';
 
-	while (!UAL_UART_UTIL_QueueIsEmpty(UAL_UART2_UTIL_QUEUE, pdMS_TO_TICKS(1000))) {
+	while (!UAL_UART_UTIL_QueueIsEmpty(UAL_UART_UTIL_QUEUE, pdMS_TO_TICKS(1000))) {
 		uint16_t data_len = UAL_UART_UTIL_Receive(
 			UART_PORT, 
-			UAL_UART2_UTIL_QUEUE,
+			UAL_UART_UTIL_QUEUE,
 			(buffer + data_pointer), 
 			buffer_len - data_pointer, 
 			0
