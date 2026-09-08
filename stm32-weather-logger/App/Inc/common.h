@@ -27,4 +27,6 @@ typedef struct {
 	TIME_t time;
 } SENSORS_DATA_t;
 
+void UAL_Error_Handler(void);
+
 #endif /* __COMMON_H */
