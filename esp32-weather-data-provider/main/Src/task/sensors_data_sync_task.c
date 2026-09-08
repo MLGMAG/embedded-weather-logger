@@ -2,6 +2,7 @@
 #include "common.h"
 #include "esp_log.h"
 #include "freertos/idf_additions.h"
+#include "freertos/projdefs.h"
 #include "hardware/uart_util.h"
 #include "json_util.h"
 #include "sdkconfig.h"
@@ -64,8 +65,9 @@ static UAL_STATUS_t receive_data(uint8_t* buffer, uint16_t buffer_len) {
 
 void UAL_SENSORS_DATA_SYNC_TASK_Start(void *pvParameters) {
 	SENSORS_DATA_t sensors_data = {};
-
 	while (1) {
+		TickType_t start = xTaskGetTickCount();
+
 		ESP_LOGI(TAG, "Synchronize sensors data.");
 
 		UAL_STATUS_t status = request_data(raw_data_buffer);
@@ -80,11 +82,12 @@ void UAL_SENSORS_DATA_SYNC_TASK_Start(void *pvParameters) {
 				&sensors_data
 			);
 		}
-
+		
 		if (status == UAL_STATUS_OK) {
 			UAL_SENSORS_DATA_STORAGE_Set(&sensors_data);
 		}
 
-		vTaskDelay(pdMS_TO_TICKS(CONFIG_SENSORS_DATA_SYNC_TIME_MS));
+		TickType_t delta = xTaskGetTickCount() - start;	
+		vTaskDelay(pdMS_TO_TICKS(CONFIG_SENSORS_DATA_SYNC_TIME_MS) - delta);
 	}
 }
