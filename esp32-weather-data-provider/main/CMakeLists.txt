@@ -7,11 +7,13 @@ idf_component_register(
     	"Src/hardware"
     	"Src/service"
     	"Src/task"
+    	"Src/util"
     INCLUDE_DIRS
     	"Inc"
     	"Inc/hardware"
     	"Inc/service"
     	"Inc/task"
+    	"Inc/util"
     PRIV_INCLUDE_DIRS   # optional, add here private include directories
     REQUIRES            # optional, list the public requirements (component names)
     PRIV_REQUIRES       # optional, list the private requirements

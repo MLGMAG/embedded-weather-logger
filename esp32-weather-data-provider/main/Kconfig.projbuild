@@ -12,6 +12,11 @@ menu "App Configuration"
 		    int "UART RX Task priority"
 			range 0 20
 		    default 5
+
+		config COMMAND_HANDLER_TASK_PRIORITY
+		    int "Command Handler Task priority"
+			range 0 20
+		    default 1
 	endmenu
 	
 	menu "UART Configuration"

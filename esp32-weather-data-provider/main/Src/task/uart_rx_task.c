@@ -17,6 +17,7 @@ static uint8_t raw_data_buffer[COMMAND_LEN_MAX] = {0};
 static uint8_t data_buffer[COMMAND_LEN_MAX] = {0};
 static uint8_t data_pointer = 0;
 
+extern QueueHandle_t COMMAND_QUEUE_HANDLER;
 extern QueueHandle_t UAL_UART1_UTIL_QUEUE;
 
 static PARSE_STATUS_t parse_data(uint8_t *in_buffer, uint32_t len) {
@@ -60,6 +61,10 @@ void UAL_UART_RX_TASK_Start(void *pvParameters) {
 			PARSE_STATUS_t parse_status = parse_data(raw_data_buffer, data_len);
 			if (parse_status == COMMAND_AVAILABLE) {
 				ESP_LOGI(TAG, "Received command: %s", data_buffer);
+				BaseType_t send_status = xQueueSend(COMMAND_QUEUE_HANDLER, data_buffer, pdMS_TO_TICKS(50));
+				if (send_status == errQUEUE_FULL) {
+					ESP_LOGE(TAG, "Failed to send command to handler.");
+				}
 			}
 		}
 
