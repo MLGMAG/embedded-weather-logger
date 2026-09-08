@@ -1,14 +1,16 @@
 #include "esp_log.h"
 #include "hardware/uart_util.h"
+#include "task/command_handler_task.h"
 #include "task/uart_rx_task.h"
 #include "task/uart_tx_task.h"
-#include "task/command_handler_task.h"
+#include "task/sensors_data_sync_task.h"
 #include <stdbool.h>
 #include <unistd.h>
 
 TaskHandle_t UART_TX_TASK_HANDLER = NULL;
 TaskHandle_t UART_RX_TASK_HANDLER = NULL;
 TaskHandle_t COMMAND_HANDLER_TASK_HANDLER = NULL;
+TaskHandle_t SENSORS_DATA_SYNC_TASK_HANDLER = NULL;
 
 QueueHandle_t UART_TX_QUEUE_HANDLER = NULL;
 QueueHandle_t COMMAND_QUEUE_HANDLER = NULL;
@@ -43,6 +45,15 @@ static void init_tasks(void) {
 						 &COMMAND_HANDLER_TASK_HANDLER);
 	if (status != pdPASS) {
 		ESP_LOGE(TAG, "Could not create COMMAND_HANDLER_TASK task, status: %d", status);
+		UAL_Error_Handler();
+	}
+
+	status = xTaskCreate(UAL_SENSORS_DATA_SYNC_TASK_Start,
+						 "SENSORS_DATA_SYNC_TASK", configMINIMAL_STACK_SIZE,
+						 NULL, CONFIG_SENSORS_DATA_SYNC_TASK_PRIORITY,
+						 &SENSORS_DATA_SYNC_TASK_HANDLER);
+	if (status != pdPASS) {
+		ESP_LOGE(TAG, "Could not create SENSORS_DATA_SYNC_TASK task, status: %d", status);
 		UAL_Error_Handler();
 	}
 }

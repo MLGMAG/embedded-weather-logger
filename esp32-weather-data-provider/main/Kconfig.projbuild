@@ -17,6 +17,11 @@ menu "App Configuration"
 		    int "Command Handler Task priority"
 			range 0 20
 		    default 1
+
+		config SENSORS_DATA_SYNC_TASK_PRIORITY
+		    int "Sensors Dats Sync Task priority"
+			range 0 20
+		    default 1
 	endmenu
 	
 	menu "UART Configuration"
@@ -58,4 +63,8 @@ menu "App Configuration"
 			default 256
 	endmenu
 	
+	config SENSORS_DATA_SYNC_TIME_MS
+	    int "Interval for sensors data syncronization in milliseconds"
+		default 60000
+
 endmenu
