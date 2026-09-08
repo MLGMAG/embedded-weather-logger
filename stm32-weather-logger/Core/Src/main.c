@@ -25,6 +25,7 @@
 #include "common.h"
 #include "task/sensor_task.h"
 #include "task/display_task.h"
+#include "task/uart_tx_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,10 +65,22 @@ const osThreadAttr_t DISPLAY_TASK_attributes = {
   .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityHigh,
 };
+/* Definitions for UART_TX_TASK */
+osThreadId_t UART_TX_TASKHandle;
+const osThreadAttr_t UART_TX_TASK_attributes = {
+  .name = "UART_TX_TASK",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for display_queue */
 osMessageQueueId_t display_queueHandle;
 const osMessageQueueAttr_t display_queue_attributes = {
   .name = "display_queue"
+};
+/* Definitions for uart_tx_queue */
+osMessageQueueId_t uart_tx_queueHandle;
+const osMessageQueueAttr_t uart_tx_queue_attributes = {
+  .name = "uart_tx_queue"
 };
 /* USER CODE BEGIN PV */
 
@@ -82,6 +95,7 @@ static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
 void SENSOR_TASK_Start(void *argument);
 void DISPLAY_TASK_Start(void *argument);
+void UART_TX_TASK_Start(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -146,7 +160,10 @@ int main(void)
 
   /* Create the queue(s) */
   /* creation of display_queue */
-  display_queueHandle = osMessageQueueNew (16, sizeof(DISPLAY_MSG_t), &display_queue_attributes);
+  display_queueHandle = osMessageQueueNew (4, sizeof(DISPLAY_MSG_t), &display_queue_attributes);
+
+  /* creation of uart_tx_queue */
+  uart_tx_queueHandle = osMessageQueueNew (4, sizeof(UART_TX_QUEUE_MSG_t), &uart_tx_queue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -158,6 +175,9 @@ int main(void)
 
   /* creation of DISPLAY_TASK */
   DISPLAY_TASKHandle = osThreadNew(DISPLAY_TASK_Start, NULL, &DISPLAY_TASK_attributes);
+
+  /* creation of UART_TX_TASK */
+  UART_TX_TASKHandle = osThreadNew(UART_TX_TASK_Start, NULL, &UART_TX_TASK_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -423,6 +443,21 @@ void DISPLAY_TASK_Start(void *argument)
   /* Infinite loop */
   UAL_DISPLAY_TASK_Start(argument);
   /* USER CODE END DISPLAY_TASK_Start */
+}
+
+/* USER CODE BEGIN Header_UART_TX_TASK_Start */
+/**
+* @brief Function implementing the UART_TX_TASK thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_UART_TX_TASK_Start */
+void UART_TX_TASK_Start(void *argument)
+{
+  /* USER CODE BEGIN UART_TX_TASK_Start */
+  /* Infinite loop */
+  UAL_UART_TX_TASK_Start(argument);
+  /* USER CODE END UART_TX_TASK_Start */
 }
 
 /**

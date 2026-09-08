@@ -3,6 +3,8 @@
 
 #include "stdint.h"
 
+#define UART_TX_MSG_LEN_MAX 128
+
 typedef enum {
 	UAL_STATUS_OK, UAL_STATUS_ERROR,
 } UAL_STATUS_t;
@@ -34,6 +36,10 @@ typedef struct {
 typedef struct {
 	SENSORS_DATA_t sensors_data;
 } DISPLAY_MSG_t;
+
+typedef struct {
+	char msg[UART_TX_MSG_LEN_MAX];
+} UART_TX_QUEUE_MSG_t;
 
 void UAL_QueueTimeoutError_Handler(void);
 void UAL_Error_Handler(void);
