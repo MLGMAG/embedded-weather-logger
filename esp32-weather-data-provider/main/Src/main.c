@@ -1,6 +1,7 @@
 #include "esp_log.h"
 #include "hardware/uart_util.h"
 #include "hardware/wifi_sta_util.h"
+#include "hardware/http_server_util.h"
 #include "task/command_handler_task.h"
 #include "task/uart_rx_task.h"
 #include "task/uart_tx_task.h"
@@ -69,6 +70,7 @@ static void init(void) {
 	init_tasks();
 	
 	UAL_WIFI_STA_UTIL_Init();
+	UAL_HTTP_SERVER_UTIL_Init();
 }
 
 void app_main(void) {
