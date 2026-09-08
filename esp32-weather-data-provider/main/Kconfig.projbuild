@@ -63,6 +63,22 @@ menu "App Configuration"
 			default 256
 	endmenu
 	
+	menu "Wi-Fi Configuration"
+		config WIFI_SSID
+		    string "WiFi SSID"
+		    help
+		        SSID (network name) you want to connect to.
+
+		config WIFI_PASSWORD
+		    string "WiFi Password"
+		    help
+		        Password of the Wi-Fi network you want to connect to.
+		
+		config WIFI_CONNECTION_MAX_RETRY
+		    int "Max connection retry count"
+			default 10
+	endmenu
+	
 	config SENSORS_DATA_SYNC_TIME_MS
 	    int "Interval for sensors data syncronization in milliseconds"
 		default 60000
