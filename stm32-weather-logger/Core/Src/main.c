@@ -26,6 +26,7 @@
 #include "task/sensor_task.h"
 #include "task/display_task.h"
 #include "task/uart_tx_task.h"
+#include "task/uart_rx_task.h"
 #include "task/flash_logger_task.h"
 /* USER CODE END Includes */
 
@@ -80,6 +81,13 @@ const osThreadAttr_t FLASH_LOG_TASK_attributes = {
   .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for UART_RX_TASK */
+osThreadId_t UART_RX_TASKHandle;
+const osThreadAttr_t UART_RX_TASK_attributes = {
+  .name = "UART_RX_TASK",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
 /* Definitions for display_queue */
 osMessageQueueId_t display_queueHandle;
 const osMessageQueueAttr_t display_queue_attributes = {
@@ -105,6 +113,7 @@ void SENSOR_TASK_Start(void *argument);
 void DISPLAY_TASK_Start(void *argument);
 void UART_TX_TASK_Start(void *argument);
 void FLASH_LOG_TASK_Start(void *argument);
+void UART_RX_TASK_Start(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -190,6 +199,9 @@ int main(void)
 
   /* creation of FLASH_LOG_TASK */
   FLASH_LOG_TASKHandle = osThreadNew(FLASH_LOG_TASK_Start, NULL, &FLASH_LOG_TASK_attributes);
+
+  /* creation of UART_RX_TASK */
+  UART_RX_TASKHandle = osThreadNew(UART_RX_TASK_Start, NULL, &UART_RX_TASK_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -485,6 +497,21 @@ void FLASH_LOG_TASK_Start(void *argument)
   /* Infinite loop */
   UAL_FLASH_LOGGER_TASK_Start(argument);
   /* USER CODE END FLASH_LOG_TASK_Start */
+}
+
+/* USER CODE BEGIN Header_UART_RX_TASK_Start */
+/**
+* @brief Function implementing the UART_RX_TASK thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_UART_RX_TASK_Start */
+void UART_RX_TASK_Start(void *argument)
+{
+  /* USER CODE BEGIN UART_RX_TASK_Start */
+  /* Infinite loop */
+  UAL_UART_RX_TASK_Start(argument);
+  /* USER CODE END UART_RX_TASK_Start */
 }
 
 /**
